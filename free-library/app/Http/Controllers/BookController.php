@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage; // Import Storage facade
+use Illuminate\Support\Facades\Storage; 
 
 class BookController extends Controller
 {
@@ -16,7 +16,7 @@ class BookController extends Controller
             return $queryBuilder->where('title', 'like', "%{$query}%")
                                 ->orWhere('author', 'like', "%{$query}%")
                                 ->orWhere('language', 'like', "%{$query}%");
-        })->paginate(5); // You can adjust the pagination count
+        })->paginate(5); 
 
         return view('books.index', compact('books'));
     }
@@ -28,31 +28,31 @@ class BookController extends Controller
 
     public function store(Request $request)
 {
-    // Validate the request data
+    
     $request->validate([
         'title' => 'required|string|max:255',
         'author' => 'required|string|max:255',
         'description' => 'nullable|string',
         'language' => 'required|string|max:255',
-        'file' => 'required|file|mimes:pdf,epub,fb2,djvu,txt,docx', // Allowed file types
-        'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Allowed image types
+        'file' => 'required|file|mimes:pdf,epub,fb2,djvu,txt,docx', 
+        'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', 
     ]);
 
-    // Store the uploaded book file with a unique name
+
     $file = $request->file('file');
     $fileName = time() . '_' . preg_replace('/\s+/', '_', $file->getClientOriginalName());
-    $filePath = $file->storeAs('books', $fileName, 'private'); // Store in storage/app/private/books
+    $filePath = $file->storeAs('books', $fileName, 'private'); 
 
-    // Check if a cover image was uploaded
+  
     if ($request->hasFile('cover_image')) {
         $coverImage = $request->file('cover_image');
         $coverImageName = time() . '_' . preg_replace('/\s+/', '_', $coverImage->getClientOriginalName());
-        $coverPath = $coverImage->storeAs('covers', $coverImageName, 'private'); // Store in storage/app/private/covers
+        $coverPath = $coverImage->storeAs('covers', $coverImageName, 'private'); 
     } else {
-        // Use the placeholder image if no cover image is uploaded
-        $coverPath = 'covers/book-cover.jpg'; // Adjust this path as necessary
+       
+        $coverPath = 'covers/book-cover.jpg'; 
     }
-    // Create a new book record
+   
     Book::create([
         'title' => $request->input('title'),
         'author' => $request->input('author'),
@@ -83,18 +83,18 @@ class BookController extends Controller
             'cover_image' => 'nullable|image|max:2048',
         ]);
 
-        // Check if a new file is uploaded
+        
         if ($request->hasFile('file')) {
-            Storage::delete($book->file_path); // Delete old file
+            Storage::delete($book->file_path); 
             $filePath = $request->file('file')->store('books');
-            $book->file_path = $filePath; // Update the file path
+            $book->file_path = $filePath; 
         }
 
-        // Check if a new cover image is uploaded
+      
         if ($request->hasFile('cover_image')) {
-            Storage::delete($book->cover_image); // Delete old cover image
+            Storage::delete($book->cover_image); 
             $coverImagePath = $request->file('cover_image')->store('covers');
-            $book->cover_image = $coverImagePath; // Update the cover image path
+            $book->cover_image = $coverImagePath; 
         }
 
         $book->title = $request->title;
@@ -108,9 +108,9 @@ class BookController extends Controller
 
     public function destroy(Book $book)
     {
-        Storage::delete($book->file_path); // Delete file
+        Storage::delete($book->file_path); 
         if ($book->cover_image) {
-            Storage::delete($book->cover_image); // Delete cover image if exists
+            Storage::delete($book->cover_image); 
         }
         $book->delete();
 

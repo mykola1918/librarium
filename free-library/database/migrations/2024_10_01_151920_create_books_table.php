@@ -6,31 +6,25 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
+  
     public function up()
 {
     Schema::create('books', function (Blueprint $table) {
-        $table->id();  // Auto-incrementing ID
+        $table->id();  
         $table->string('title');
         $table->string('author');
         $table->text('description');
-        $table->string('file_path')->nullable();  // Path to the uploaded file
+        $table->string('file_path')->nullable();  
         $table->timestamp('time_uploaded')->nullable();
         $table->timestamp('time_edited')->nullable();
         $table->string('language')->nullable();
         $table->string('file_type')->nullable();
-        $table->string('cover_image')->nullable();  // Cover image of the book
-        $table->timestamps();  // created_at and updated_at
+        $table->string('cover_image')->nullable();  
+        $table->timestamps(); 
     });
 }
 
     
-
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('books');

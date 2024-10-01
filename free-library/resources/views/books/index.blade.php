@@ -33,7 +33,7 @@
                         <p>No books available.</p>
                     @endif
                 </div>
-                {{ $books->links() }} <!-- Pagination -->
+                {{ $books->links() }}
             </div>
         </div>
     </div>

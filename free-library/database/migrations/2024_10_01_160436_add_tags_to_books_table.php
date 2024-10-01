@@ -6,20 +6,18 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
+   
     public function up()
 {
     Schema::table('books', function (Blueprint $table) {
-        $table->string('tags')->nullable(); // Add tags column
+        $table->string('tags')->nullable();
     });
 }
 
 public function down()
 {
     Schema::table('books', function (Blueprint $table) {
-        $table->dropColumn('tags'); // Remove tags column if needed
+        $table->dropColumn('tags'); 
     });
 }
 };
